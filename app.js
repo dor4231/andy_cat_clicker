@@ -1,3 +1,16 @@
+const model = {
+
+};
+
+const octo = {
+
+};
+
+const view = {
+
+};
+
+
 
 var cats = $(".cat");
 var buttons = $("button");
