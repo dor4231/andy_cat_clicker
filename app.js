@@ -8,63 +8,51 @@ const model = {
     ]
 };
 
-const octo = {};
+const octo = {
+    start: function() {
+        view.renderCat(model.cats[0]);
+        view.renderButtons(model.cats);
+    }
+};
 
 const view = {
     cats: document.querySelector(".cat"),
-    buttons: $(".catlist"),
+    buttons: document.querySelector(".catlist"),
 
     renderCat: function (cat) {
-        this.cats.querySelector(".counter").innerText = cat.clickCount;
-        // noinspection JSAnnotator
-        this.cats.querySelector("img").src = cat.image;
-        this.cats.querySelector("img").addEventListener("click", function () {
-            console.log("Cat " + cat.name + " is clicked");
+        const counter = this.cats.querySelector(".counter");
+        const image = document.createElement('img');
+        this.cats.removeChild(this.cats.querySelector("img"));
+
+        counter.innerText = cat.clickCount;
+        image.src = cat.image;
+        image.addEventListener("click", function () {
             cat.clickCount += 1;
-        })
+            counter.innerText = cat.clickCount;
+        });
+        this.cats.appendChild(image);
     },
 
-    renderButtons: function () {
-        this.buttons.children(".counter").text = cat.clickCount;
-        this.cats.children("img").addEventListener("click", function () {
-            console.log("Cat " + cat.name + " is clicked");
-            cat.clickCount += 1;
-        })
+    renderButtons: function (cats) {
+        const self = this;
+            counter = 1;
+        for (const cat of cats) {
+
+            const button = document.createElement('button');
+            button.classList.add(`button${counter}`);
+            button.innerText = cat.name;
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                console.log("Cat " + cat.name + " is clicked");
+                self.renderCat(cat);
+            });
+
+            this.buttons.appendChild(button);
+            counter++;
+        }
     }
 };
 
 
-view.renderCat(model.cats[1]);
 
-function hideAllCats() {
-    for (var i = 0; i < cats.length; i++) {
-        $(cats[i]).hide();
-    }
-}
-
-function bindButtonToCat(idNumber) {
-    $("#button" + idNumber).click(function () {
-        hideAllCats();
-        $("#cat" + idNumber).show();
-    })
-}
-
-function bindCounterToCat(idNumber) {
-    var cat = "#cat" + idNumber
-    $(cat).click(function () {
-        var count = $(cat + " > .counter").text();
-        count = parseInt(count) + 1;
-        $(cat + " > .counter").text(count);
-    })
-}
-
-// for (var i = 1; i <= buttons.length; i++) {
-//     bindButtonToCat(i);
-// }
-
-// for (var i = 1; i <= cats.length; i++) {
-//     bindCounterToCat(i);
-// }
-
-// hideAllCats();
-// $("#cat1").show();
+octo.start();
